@@ -1,0 +1,27 @@
+Endpoint URL https://retoolapi.dev/XTl7JY/data
+
+HTTP method endpoints
+
+GET
+/XTl7JY/data
+
+GET filter
+/XTl7JY/data?nombre=value
+
+GET by id
+/XTl7JY/data/1
+
+GET paginate
+/XTl7JY/data?_page=2&_limit=10
+
+POST
+/XTl7JY/data
+
+PUT
+/XTl7JY/data/1
+
+PATCH
+/XTl7JY/data/1
+
+DELETE
+/XTl7JY/data/1
