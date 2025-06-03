@@ -29,7 +29,7 @@ function mostrarDatos(datos) {
                 <td>${persona.edad}</td>
                 <td>
                     <button>Editar</button>
-                    <button>Eliminar</button>
+                    <button onClick="EliminarPersona(${persona.id})">Eliminar</button>
                 </td>
             </tr>
         `;
@@ -87,3 +87,16 @@ document.getElementById("frmAgregar").addEventListener("submit", async e => {
         alert("Hubo un error al agregar");
     }
 });
+
+//Función para borrar registros
+async function EliminarPersona(id) {
+    const confirmacion = confirm("¿Está seguro de que deseas eliminar el registro?");
+
+    //Validamos si el usuario dijo que sí desea borrar
+    if (confirmacion) {
+        await fetch(`${API_URL}/${id}`, {method:"DELETE"});
+    }
+
+    //Recargamos la tabla para ver la eliminación
+    obtenerPersonas();
+}
