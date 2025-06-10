@@ -28,8 +28,8 @@ function mostrarDatos(datos) {
                 <td>${persona.email}</td>
                 <td>${persona.edad}</td>
                 <td>
-                    <button>Editar</button>
-                    <button onClick="EliminarPersona(${persona.id})">Eliminar</button>
+                    <button onClick="abrirModalEditar(${persona.id}, '${persona.nombre}', '${persona.apellido}', '${persona.email}', ${persona.edad})">Editar</button>
+                    <button onClick="EliminarPersona(${persona.id})">Eliminar</button>-
                 </td>
             </tr>
         `;
@@ -100,3 +100,56 @@ async function EliminarPersona(id) {
     //Recargamos la tabla para ver la eliminación
     obtenerPersonas();
 }
+
+//Proceso para editar un registro
+const modalEditar = document.getElementById("modal-editar");
+const btnCerrarEditar = document.getElementById("btnCerrarEditar");
+
+btnCerrarEditar.addEventListener("click", () => {
+    modalEditar.close(); //Cerrar modal
+});
+
+function abrirModalEditar (id, nombre, apellido, email, edad) {
+    //Se agregan los valores del registro en los input
+    document.getElementById("idEditar").value = id;
+    document.getElementById("nombreEditar").value = nombre;
+    document.getElementById("apellidoEditar").value = apellido;
+    document.getElementById("emailEditar").value = email;
+    document.getElementById("edadEditar").value = edad;
+
+    //Modal se abre después de agregar los valores a los input
+    modalEditar.showModal();
+}
+
+document.getElementById("frmEditar").addEventListener("submit", async e => {
+    e.preventDefault(); //e representa a "submit" - Evita que el formulario se envíe
+    //Capturar los valores del formulario
+    const id = document.getElementById("idEditar").value.trim();
+    const nombre = document.getElementById("nombreEditar").value.trim();
+    const apellido = document.getElementById("apellidoEditar").value.trim();
+    const email = document.getElementById("emailEditar").value.trim();
+    const edad = document.getElementById("edadEditar").value.trim();
+
+    //Validación básica
+    if(!id || !nombre || !apellido || !email || !edad) {
+        alert("Complete todos los campos");
+        return; //Evitar que el formulario se envíe
+    }
+
+    //Llamar a la API
+    const respuesta = await fetch(`${API_URL}/${id}`, {
+        method: "PUT",
+        headers: {'Content-Type': 'application/json'}, //Indicar a la API que el contenido que recibe es un JSON
+        body: JSON.stringify({edad, email, nombre, apellido})
+    });
+
+    if (respuesta.ok) {
+        alert("El registro fue actualizado correctamente");
+        modalEditar.close();
+        
+        //Recargar la tabla
+        obtenerPersonas();
+    } else {
+        alert("Hubo un error al actualizar");
+    }
+});
